@@ -1,29 +1,34 @@
-const slider = document.querySelector('.items');
-let isDown = false;
-let startX;
-let scrollLeft;
+// Your code here.
+const container = document.getElementById('container');
+const cubes = document.querySelectorAll('.cube');
 
-slider.addEventListener('mousedown', (e) => {
-  isDown = true;
-  slider.classList.add('active');
-  startX = e.pageX - slider.offsetLeft;
-  scrollLeft = slider.scrollLeft;
+let selectedCube = null;
+let offsetX = 0;
+let offsetY = 0;
+
+cubes.forEach(cube => {
+  cube.addEventListener('mousedown', (e) => {
+    selectedCube = cube;
+    offsetX = e.clientX - cube.offsetLeft;
+    offsetY = e.clientY - cube.offsetTop;
+  });
 });
 
-slider.addEventListener('mouseleave', () => {
-  isDown = false;
-  slider.classList.remove('active');
+document.addEventListener('mousemove', (e) => {
+  if (!selectedCube) return;
+
+  const containerRect = container.getBoundingClientRect();
+  let newX = e.clientX - containerRect.left - offsetX;
+  let newY = e.clientY - containerRect.top - offsetY;
+
+  // Constrain within container
+  newX = Math.max(0, Math.min(newX, container.clientWidth - selectedCube.offsetWidth));
+  newY = Math.max(0, Math.min(newY, container.clientHeight - selectedCube.offsetHeight));
+
+  selectedCube.style.left = `${newX}px`;
+  selectedCube.style.top = `${newY}px`;
 });
 
-slider.addEventListener('mouseup', () => {
-  isDown = false;
-  slider.classList.remove('active');
-});
-
-slider.addEventListener('mousemove', (e) => {
-  if (!isDown) return;
-  e.preventDefault();
-  const x = e.pageX - slider.offsetLeft;
-  const walk = (x - startX) * 2; // Adjust scroll speed
-  slider.scrollLeft = scrollLeft - walk;
+document.addEventListener('mouseup', () => {
+  selectedCube = null;
 });
