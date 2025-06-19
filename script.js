@@ -1,34 +1,48 @@
-// Your code here.
-const container = document.getElementById('container');
-const cubes = document.querySelectorAll('.cube');
+const container = document.querySelector(".container");
+const cubes = document.querySelectorAll(".cube");
 
 let selectedCube = null;
-let offsetX = 0;
-let offsetY = 0;
+let offsetX, offsetY;
+let containerRect = container.getBoundingClientRect();
+
+// Position cubes initially in a grid layout manually
+const spacing = 100; // cube (80px) + margin (10px * 2)
+cubes.forEach((cube, index) => {
+  const row = Math.floor(index / 2);
+  const col = index % 2;
+  cube.style.left = `${col * spacing + 10}px`;
+  cube.style.top = `${row * spacing + 10}px`;
+});
 
 cubes.forEach(cube => {
-  cube.addEventListener('mousedown', (e) => {
+  cube.addEventListener("mousedown", (e) => {
     selectedCube = cube;
     offsetX = e.clientX - cube.offsetLeft;
     offsetY = e.clientY - cube.offsetTop;
+    cube.style.zIndex = 1000;
   });
 });
 
-document.addEventListener('mousemove', (e) => {
-  if (!selectedCube) return;
+document.addEventListener("mousemove", (e) => {
+  if (selectedCube) {
+    let x = e.clientX - offsetX;
+    let y = e.clientY - offsetY;
 
-  const containerRect = container.getBoundingClientRect();
-  let newX = e.clientX - containerRect.left - offsetX;
-  let newY = e.clientY - containerRect.top - offsetY;
+    // Constrain within container
+    const maxX = container.clientWidth - selectedCube.offsetWidth;
+    const maxY = container.clientHeight - selectedCube.offsetHeight;
 
-  // Constrain within container
-  newX = Math.max(0, Math.min(newX, container.clientWidth - selectedCube.offsetWidth));
-  newY = Math.max(0, Math.min(newY, container.clientHeight - selectedCube.offsetHeight));
+    x = Math.max(0, Math.min(x, maxX));
+    y = Math.max(0, Math.min(y, maxY));
 
-  selectedCube.style.left = `${newX}px`;
-  selectedCube.style.top = `${newY}px`;
+    selectedCube.style.left = `${x}px`;
+    selectedCube.style.top = `${y}px`;
+  }
 });
 
-document.addEventListener('mouseup', () => {
-  selectedCube = null;
+document.addEventListener("mouseup", () => {
+  if (selectedCube) {
+    selectedCube.style.zIndex = "";
+    selectedCube = null;
+  }
 });
