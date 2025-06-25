@@ -1,39 +1,28 @@
-const cubes = document.querySelectorAll('.cube');
-const container = document.querySelector('.container');
+const items = document.querySelector('.items');
 
-let selected = null;
-let offsetX = 0;
-let offsetY = 0;
+let isDown = false;
+let startX;
+let scrollLeft;
 
-cubes.forEach(cube => {
-  cube.addEventListener('mousedown', (e) => {
-    selected = cube;
-    const rect = cube.getBoundingClientRect();
-    offsetX = e.clientX - rect.left;
-    offsetY = e.clientY - rect.top;
-
-    document.addEventListener('mousemove', drag);
-    document.addEventListener('mouseup', drop);
-  });
+items.addEventListener('mousedown', (e) => {
+  isDown = true;
+  items.classList.add('active');
+  startX = e.pageX - items.offsetLeft;
+  scrollLeft = items.scrollLeft;
 });
 
-function drag(e) {
-  if (!selected) return;
-  const containerRect = container.getBoundingClientRect();
+items.addEventListener('mouseleave', () => {
+  isDown = false;
+});
 
-  let newLeft = e.clientX - containerRect.left - offsetX;
-  let newTop = e.clientY - containerRect.top - offsetY;
+items.addEventListener('mouseup', () => {
+  isDown = false;
+});
 
-  // Boundaries
-  newLeft = Math.max(0, Math.min(newLeft, container.scrollWidth - selected.offsetWidth));
-  newTop = Math.max(0, Math.min(newTop, container.offsetHeight - selected.offsetHeight));
-
-  selected.style.left = `${newLeft}px`;
-  selected.style.top = `${newTop}px`;
-}
-
-function drop() {
-  selected = null;
-  document.removeEventListener('mousemove', drag);
-  document.removeEventListener('mouseup', drop);
-}
+items.addEventListener('mousemove', (e) => {
+  if (!isDown) return;
+  e.preventDefault();
+  const x = e.pageX - items.offsetLeft;
+  const walk = (x - startX) * 2; // scroll speed
+  items.scrollLeft = scrollLeft - walk;
+});

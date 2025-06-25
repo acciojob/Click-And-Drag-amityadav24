@@ -5,26 +5,30 @@ body {
 }
 
 .container {
-  width: 400px;
-  height: 200px;
-  border: 2px solid #333;
-  overflow-x: auto;
-  white-space: nowrap;
-  position: relative;
-  background: #f4f4f4;
+  width: 600px;
+  overflow: hidden;
+  border: 2px solid #444;
+  margin: 0 auto;
 }
 
 .items {
-  position: relative;
-  height: 100%;
-  width: 400px; /* deliberately wide for horizontal scroll */
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  padding: 10px;
+  cursor: grab;
+  scroll-behavior: smooth;
 }
 
-.cube {
-  width: 60px;
-  height: 60px;
-  background-color: #3498db;
-  border-radius: 5px;
-  position: absolute;
-  cursor: grab;
+.card {
+  min-width: 200px;
+  height: 100px;
+  background: #3498db;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border-radius: 8px;
+  font-size: 1.2em;
 }
