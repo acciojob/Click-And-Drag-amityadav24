@@ -1,34 +1,30 @@
 body {
   font-family: Arial, sans-serif;
-  background-color: #f9f9f9;
   margin: 0;
   padding: 20px;
 }
 
 .container {
-  position: relative;
   width: 600px;
-  height: 400px;
-  margin: 0 auto;
+  height: 200px;
   border: 2px solid #333;
-  background-color: #fff;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  padding: 10px;
+  overflow-x: auto;
+  white-space: nowrap;
+  position: relative;
+  background: #f4f4f4;
+}
+
+.items {
+  position: relative;
+  height: 100%;
+  width: 1000px; /* deliberately wide for horizontal scroll */
 }
 
 .cube {
   width: 60px;
   height: 60px;
-  background-color: #007bff;
-  cursor: grab;
-  position: absolute;
+  background-color: #3498db;
   border-radius: 5px;
+  position: absolute;
+  cursor: grab;
 }
-
-/* Initial grid placement */
-.container .cube:nth-child(1) { top: 10px; left: 10px; }
-.container .cube:nth-child(2) { top: 10px; left: 90px; }
-.container .cube:nth-child(3) { top: 90px; left: 10px; }
-.container .cube:nth-child(4) { top: 90px; left: 90px; }
